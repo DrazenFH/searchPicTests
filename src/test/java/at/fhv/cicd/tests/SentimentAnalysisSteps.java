@@ -40,9 +40,14 @@ public class SentimentAnalysisSteps {
 			capabilities.setCapability("headless", true);
 		}
 
-		driver = new RemoteWebDriver(
-				new URL("http://" + System.getenv("TESTINGBOT_KEY") + "@hub.testingbot.com/wd/hub"),
-				capabilities);
+		final String KEY = "6e0a56f7da87fc802798e27a4cb15133";
+		final String SECRET = "d3007222110f22ec47081c40034286a5";
+		 final String URL = "http://" + KEY + ":" + SECRET + "@hub.testingbot.com/wd/hub";
+
+	 driver = new RemoteWebDriver(new URL(URL), capabilities);
+//		driver = new RemoteWebDriver(
+//				new URL("http://" + System.getenv("TESTINGBOT_KEY") + "@hub.testingbot.com/wd/hub"),
+//				capabilities);
 
 		// prevent errors if we start from a sleeping heroku instance
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
