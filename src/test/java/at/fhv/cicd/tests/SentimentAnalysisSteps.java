@@ -32,8 +32,8 @@ public class SentimentAnalysisSteps {
 	public void before(Scenario scenario) throws Exception {
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability("platform", "WIN10");
-		capabilities.setCapability("version", "64");
-		capabilities.setCapability("browserName", "firefox");
+		capabilities.setCapability("version", "71");
+		capabilities.setCapability("browserName", "chrome");
 		capabilities.setCapability("name", scenario.getName());
 
 		if (!scenario.getName().endsWith("(video)")) {
