@@ -1,11 +1,11 @@
 #!/opt/pyenv/shims/python
 import json, sys, urllib, os, time;
 
-url = "https://" + os.environ['TESTINGBOT_CREDENTIALS'] + "@api.testingbot.com/v1/tests?count=10?skip_fields=logs,thumbs,steps"
+url = "https://" + os.environ['TESTINGBOT_KEY'] + "@api.testingbot.com/v1/tests?count=10?skip_fields=logs,thumbs,steps"
 
 # this loop is needed because the video may not be available right now and we need to wait
 # we do 10 tries after we exit
-for i in range(0, 10):
+for i in range(0, 50):
     jsonurl = urllib.urlopen(url)
     response = json.loads(jsonurl.read())
 

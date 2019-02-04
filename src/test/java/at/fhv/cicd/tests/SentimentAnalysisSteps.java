@@ -41,7 +41,7 @@ public class SentimentAnalysisSteps {
 		}
 
 		driver = new RemoteWebDriver(
-				new URL("http://" + System.getenv("TESTINGBOT_CREDENTIALS") + "@hub.testingbot.com/wd/hub"),
+				new URL("http://" + System.getenv("TESTINGBOT_KEY") + "@hub.testingbot.com/wd/hub"),
 				capabilities);
 
 		// prevent errors if we start from a sleeping heroku instance
@@ -68,74 +68,67 @@ public class SentimentAnalysisSteps {
 		driver.findElement(By.id("loginBtn")).click();
 	}
 
-	@When("^Analyze the text '(.*?)'$")
-	public void analyzeText(String text) {
-		WebElement textField = driver.findElement(By.id("analyzeText"));
+	@When("^Search the picture '(.*?)'$")
+	public void searchPic(String text) {
+		WebElement textField = driver.findElement(By.id("searchText"));
 		textField.clear();
 		textField.sendKeys(text);
 
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("analyzeBtn")));
+		WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("searchBtn")));
 		button.click();
 
 	}
 
-	@Then("^The smiley should be (.*?)$")
+	@Then("^The result list should be (.*?)$")
 	// wait until the result has been received
-	public void checkSentiment(String sentiment) {
+	public void checkSearchPicRequest(String picResult) {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("analyzeBtn")));
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("searchBtn")));
 
-		WebElement sentimentItem = driver.findElement(By.id("sentiment"));
-		verifySentiment(sentimentItem, sentiment);
+		WebElement pictureItem = driver.findElement(By.id("img01"));
+		verifyPicture(pictureItem, picResult);
 	}
 
 	@When("^I press logout$")
 	public void logout() {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
-		WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("logoutLink")));
-		logoutLink.click();
 
 		// wait until popup is visible
 		WebElement logoutBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("logoutBtn")));
 		logoutBtn.click();
 	}
 
-	@Then("^I see the login page$")
-	public void checkLoginPage() {
-		assertFalse(driver.findElements(By.id("logo")).isEmpty());
-	}
-
-	@When("^Navigate to history$")
-	public void navigateToHistory() {
-		driver.findElement(By.linkText("History")).click();
-	}
-
-	@Then("^The ([0-9]). row shows the history item with text '(.*?)' and sentiment is '(.*?)'")
-	public void checkHistoryItem(int row, String text, String sentiment) {
-		WebElement textCell = driver.findElement(By.xpath("//table/tbody/tr[" + row + "]/td[1]"));
-		WebElement sentimentIcon = driver.findElement(By.xpath("//table/tbody/tr[" + row + "]/td[2]/i"));
-
-		assertEquals(text, textCell.getText());
-		verifySentiment(sentimentIcon, sentiment);
-	}
+//	@Then("^I see the login page$")
+//	public void checkLoginPage() {
+//		assertFalse(driver.findElements(By.id("logo")).isEmpty());
+//	}
+//
+//	@When("^Navigate to history$")
+//	public void navigateToHistory() {
+//		driver.findElement(By.linkText("History")).click();
+//	}
+//
+//	@Then("^The ([0-9]). row shows the history item with text '(.*?)' and sentiment is '(.*?)'")
+//	public void checkHistoryItem(int row, String text, String sentiment) {
+//		WebElement textCell = driver.findElement(By.xpath("//table/tbody/tr[" + row + "]/td[1]"));
+//		WebElement sentimentIcon = driver.findElement(By.xpath("//table/tbody/tr[" + row + "]/td[2]/i"));
+//
+//		assertEquals(text, textCell.getText());
+//		verifySentiment(sentimentIcon, sentiment);
+//	}
 
 	/**
 	 * Check if the given icon contains the given sentiment
 	 *
-	 * @param sentimentIcon The icon to check
-	 * @param sentiment     The sentiment which should be set in the icon
+	 * @param pictureItem The icon to check
+	 * @param pictureResult    The sentiment which should be set in the icon
 	 */
-	private void verifySentiment(WebElement sentimentIcon, String sentiment) {
-		String classes = sentimentIcon.getAttribute("class");
-		if ("happy".equals(sentiment)) {
-			assertTrue(classes.contains("smile"));
-		} else if ("unhappy".equals(sentiment)) {
-			assertTrue(classes.contains("frown"));
-		} else if ("neutral".equals(sentiment)) {
-			assertTrue(classes.contains("meh"));
-		} else {
-			fail();
-		}
+	private void verifyPicture(WebElement pictureItem, String pictureResult) {
+
+		String classes = pictureItem.getAttribute("src");
+
+		assertTrue(classes.contains("https://farm8.staticflickr.com/7908/46888308852_cc302c9992.jpg"));
+
 	}
 }
