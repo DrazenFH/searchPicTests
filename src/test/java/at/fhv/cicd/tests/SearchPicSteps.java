@@ -32,7 +32,7 @@ public class SearchPicSteps {
 	public void before(Scenario scenario) throws Exception {
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability("platform", "WIN10");
-		capabilities.setCapability("version", "71");
+		capabilities.setCapability("version", "70");
 		capabilities.setCapability("browserName", "chrome");
 		capabilities.setCapability("name", scenario.getName());
 
@@ -40,14 +40,10 @@ public class SearchPicSteps {
 			capabilities.setCapability("headless", true);
 		}
 
-		final String KEY = "6e0a56f7da87fc802798e27a4cb15133";
-		final String SECRET = "d3007222110f22ec47081c40034286a5";
-		 final String URL = "http://" + KEY + ":" + SECRET + "@hub.testingbot.com/wd/hub";
 
-	 driver = new RemoteWebDriver(new URL(URL), capabilities);
-//		driver = new RemoteWebDriver(
-//				new URL("http://" + System.getenv("TESTINGBOT_KEY") + "@hub.testingbot.com/wd/hub"),
-//				capabilities);
+		driver = new RemoteWebDriver(
+				new URL("http://" + System.getenv("$TESTINGBOT_KEY") + "@hub.testingbot.com/wd/hub"),
+				capabilities);
 
 		// prevent errors if we start from a sleeping heroku instance
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -108,20 +104,6 @@ public class SearchPicSteps {
 	public void checkLoginPage() {
 		assertFalse(driver.findElements(By.id("logo")).isEmpty());
 	}
-//
-//	@When("^Navigate to history$")
-//	public void navigateToHistory() {
-//		driver.findElement(By.linkText("History")).click();
-//	}
-//
-//	@Then("^The ([0-9]). row shows the history item with text '(.*?)' and sentiment is '(.*?)'")
-//	public void checkHistoryItem(int row, String text, String sentiment) {
-//		WebElement textCell = driver.findElement(By.xpath("//table/tbody/tr[" + row + "]/td[1]"));
-//		WebElement sentimentIcon = driver.findElement(By.xpath("//table/tbody/tr[" + row + "]/td[2]/i"));
-//
-//		assertEquals(text, textCell.getText());
-//		verifySentiment(sentimentIcon, sentiment);
-//	}
 
 	/**
 	 * Check if the given icon contains the given sentiment

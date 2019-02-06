@@ -1,7 +1,7 @@
 Feature: Automated User Acceptance Tests for the Search Pic Application
 
   Background:
-    Given Open https://searchpic.herokuapp.com/
+    Given Open https://searchpic-staging.herokuapp.com/
 
   Scenario: Test login
     Given Login with user 'user@test.com'
